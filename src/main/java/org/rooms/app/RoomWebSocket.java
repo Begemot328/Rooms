@@ -26,17 +26,19 @@ public class RoomWebSocket {
     }
 
     @OnMessage
-    public void onMessage(Session session, Boolean isOn) {
-        this.isOn = isOn;
+    public void onMessage(Session session, String isOn) {
+        System.out.println(isOn);
+        this.isOn = Boolean.valueOf(isOn);
 
         for (Map.Entry<String, Session> peer : sessions.entrySet()) {
-          //  if (!peer.getValue().equals(session))
+            if (!peer.getValue().equals(session)) {
                 try {
-                    peer.getValue().getBasicRemote().sendObject(isOn);
-                } catch (IOException | EncodeException e) {
+                    peer.getValue().getBasicRemote().sendText(isOn);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-         //   }
+            }
         }
     }
 }
+
