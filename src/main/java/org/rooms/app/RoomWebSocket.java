@@ -1,27 +1,24 @@
 package org.rooms.app;
 
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@ServerEndpoint("/room/{country}")
+@ServerEndpoint("/room")
 public class RoomWebSocket {
     private static final long serialVersionUID = 1L;
-    private static final Map<String,  Map<String,  Session>> sessionPool
-            = Collections.synchronizedMap(new HashMap<String, Map<String,  Session>>());
-    private static Map<String,  Session> sessions;
+    private static Map<String, Session> sessions
+            =  Collections.synchronizedMap(new HashMap<String, Session>());
     private Boolean isOn = false;
 
     @OnOpen
-    public void onConnectionOpen(Session session, @PathParam("country") String country) {
-        sessions = sessionPool.get(country);
-        if (sessions == null) {
-            sessions = Collections.synchronizedMap(new HashMap<String, Session>());
-        }
+    public void onConnectionOpen(Session session) {
         sessions.put(String.valueOf(session.getId()), session);
     }
 
@@ -45,7 +42,5 @@ public class RoomWebSocket {
             }
         }
     }
-
-
 }
 
