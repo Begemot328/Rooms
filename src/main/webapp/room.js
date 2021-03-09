@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost:8081/Rooms_war_exploded/room");
+var socket = new WebSocket("ws://localhost:8081/Rooms_war_exploded/room/" + "us");
 socket.onmessage = onMessage;
 window.onload = onLoad;
 var isOn;

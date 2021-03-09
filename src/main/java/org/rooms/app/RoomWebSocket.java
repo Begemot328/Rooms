@@ -1,5 +1,8 @@
 package org.rooms.app;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -10,6 +13,8 @@ import java.util.Map;
 
 @ServerEndpoint("/room/{country}")
 public class RoomWebSocket {
+
+    static Logger logger = LoggerFactory.getLogger(RoomWebSocket.class);
     private static final long serialVersionUID = 1L;
     private static final Map<String,  Map<String,  Session>> sessionPool
             = Collections.synchronizedMap(new HashMap<String, Map<String,  Session>>());
@@ -19,22 +24,32 @@ public class RoomWebSocket {
     @OnOpen
     public void onConnectionOpen(Session session, @PathParam("country") String country) {
         sessions = sessionPool.get(country);
+        logger.debug("connected " + session.getId() + " to room " + country);
         if (sessions == null) {
             sessions = Collections.synchronizedMap(new HashMap<String, Session>());
         }
-        sessions.put(String.valueOf(session.getId()), session);
+        sessionPool.put(country, sessions);
+        sessions.put(session.getId(), session);
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, @PathParam("country") String country) {
+        sessions = sessionPool.get(country);
+        if (sessions == null) {
+            throw new RuntimeException("no such connection");
+        }
         sessions.remove(session.getId());
+        logger.debug("disconnected " + session.getId() + " from room " + country);
     }
 
     @OnMessage
-    public void onMessage(Session session, String isOn) {
-        System.out.println(isOn);
+    public void onMessage(Session session, @PathParam("country") String country, String isOn) {
+        logger.debug(country + " message " + isOn + " from " + session.getId());
         this.isOn = Boolean.valueOf(isOn);
-
+        sessions = sessions = sessionPool.get(country);
+        if (sessions == null) {
+            throw new RuntimeException("no such connection");
+        }
         for (Map.Entry<String, Session> peer : sessions.entrySet()) {
             if (!peer.getValue().equals(session)) {
                 try {
@@ -45,7 +60,5 @@ public class RoomWebSocket {
             }
         }
     }
-
-
 }
 

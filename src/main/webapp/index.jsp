@@ -1,3 +1,4 @@
+<%@ page session="true" %>
 <html>
 <head>
     <script src="room.js"></script>
