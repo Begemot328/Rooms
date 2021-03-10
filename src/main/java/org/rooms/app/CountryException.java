@@ -1,6 +1,7 @@
 package org.rooms.app;
 
 public class CountryException extends ProjectException{
+
     public CountryException(String message) {
         super(message);
     }
