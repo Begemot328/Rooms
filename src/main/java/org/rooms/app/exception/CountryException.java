@@ -1,4 +1,4 @@
-package org.rooms.app;
+package org.rooms.app.exception;
 
 public class CountryException extends ProjectException{
 

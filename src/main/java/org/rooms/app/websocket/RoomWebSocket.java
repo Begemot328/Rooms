@@ -1,5 +1,6 @@
-package org.rooms.app;
+package org.rooms.app.websocket;
 
+import org.rooms.app.service.Rooms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,6 @@ public class RoomWebSocket {
     private static final Map<String,  Map<String,  Session>> sessionPool
             = Collections.synchronizedMap(new HashMap<String, Map<String,  Session>>());
     private static Map<String,  Session> sessions;
-    private Boolean isOn = false;
 
     @OnOpen
     public void onConnectionOpen(Session session, @PathParam("country") String country) {
@@ -45,8 +45,10 @@ public class RoomWebSocket {
     @OnMessage
     public void onMessage(Session session, @PathParam("country") String country, String isOn) {
         logger.debug(country + " message " + isOn + " from " + session.getId());
-        this.isOn = Boolean.valueOf(isOn);
-        sessions = sessions = sessionPool.get(country);
+
+        Rooms.getInstance().setRoom(country, Boolean.valueOf(isOn));
+
+        sessions = sessionPool.get(country);
         if (sessions == null) {
             throw new RuntimeException("no such connection");
         }

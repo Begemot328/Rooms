@@ -1,4 +1,4 @@
-package org.rooms.app;
+package org.rooms.app.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +29,4 @@ public class JsonReader {
             is.close();
         }
     }
-
-
 }

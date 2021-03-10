@@ -6,20 +6,29 @@
 <html>
 <head>
     <title>Choose a room</title>
+
 </head>
 <body>
+<script src="${pageContext.request.contextPath}/enabling.js"></script>
 <h2>Choose a room</h2>
+<label for="countrySelect">Countries:</label>
+<form id="country" method="GET" action="${pageContext.servletContext.contextPath}/room">
+    <div>
+        <select id="countrySelect" name="countryCode" form="country">
+            <c:forEach var="locale" items="${applicationScope.locales}">
+                <option id="${locale.country}" value="${locale.country}"><c:out value="${locale.displayCountry}"/></option>
+            </c:forEach>
+        </select>
 
-<label for="countrySelect">Countries</label>
-<select id="countrySelect" name="countryCode" form="country">
-    <c:forEach var="locale" items="${applicationScope.locales}">
-        <option id="${locale.country}" value="${locale.country}"><c:out value="${locale.displayCountry}"/></option>
-    </c:forEach>
-</select>
-<form id="country" method="GET" action="${pageContext.request.contextPath}/room">
-    <label>
-        <input type="checkbox" name="auto" value="auto"/>
-    </label>
+
+        <input id="auto" type="checkbox" name="auto" value="true" onchange="EnableDisable()"/>
+        <label for="auto">auto</label>
+        <input id="local" type="checkbox" name="local" value="true" onchange="EnableDisable()"/>
+        <label for="local">
+            localhost
+        </label>
+    </div>
+    <br/>
     <button type="submit">To room</button>
 </form>
 </body>
