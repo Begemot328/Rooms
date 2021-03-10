@@ -10,7 +10,7 @@ window.onload = onLoad;
 
 function onLoad() {
     node = document.getElementById("status");
-    isOn = Boolean(document.getElementById("initial_status").innerText);
+    isOn = document.getElementById("initial_status").innerText === "true";
     var1 = document.getElementById("var1").innerText;
     var2 = document.getElementById("var2").innerText;
     node.innerText = selectVar(isOn, var1, var2);

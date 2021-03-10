@@ -48,6 +48,7 @@ public class RoomWebSocket {
 
         Rooms.getInstance().setRoom(country, Boolean.valueOf(isOn));
 
+        logger.debug(country + " " + Rooms.getInstance().getRoom(country));
         sessions = sessionPool.get(country);
         if (sessions == null) {
             throw new RuntimeException("no such connection");

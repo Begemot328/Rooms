@@ -1,4 +1,4 @@
-package org.rooms.app;
+package org.rooms.app.controller;
 
 /**
  * Class JSP pages names

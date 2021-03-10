@@ -6,10 +6,9 @@
 <html>
 <head>
     <title>Choose a room</title>
-
+    <script src="${pageContext.request.contextPath}/enabling.js"></script>
 </head>
 <body>
-<script src="${pageContext.request.contextPath}/enabling.js"></script>
 <h2>Choose a room</h2>
 <label for="countrySelect">Countries:</label>
 <form id="country" method="GET" action="${pageContext.servletContext.contextPath}/room">
@@ -19,7 +18,6 @@
                 <option id="${locale.country}" value="${locale.country}"><c:out value="${locale.displayCountry}"/></option>
             </c:forEach>
         </select>
-
 
         <input id="auto" type="checkbox" name="auto" value="true" onchange="EnableDisable()"/>
         <label for="auto">auto</label>

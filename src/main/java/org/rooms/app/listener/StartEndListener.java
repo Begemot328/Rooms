@@ -2,6 +2,8 @@ package org.rooms.app.listener;
 
 
 import org.rooms.app.controller.RequestParameters;
+import org.rooms.app.service.RoomJsonConverter;
+import org.rooms.app.service.Rooms;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -25,6 +27,8 @@ public class StartEndListener implements ServletContextListener {
                 locales);
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 Locale.getISOCountries());
+
+        new RoomJsonConverter().open(Rooms.getInstance());
     }
 
     public void contextDestroyed (ServletContextEvent ev) {
@@ -33,5 +37,7 @@ public class StartEndListener implements ServletContextListener {
                 null);
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 null);
+
+        new RoomJsonConverter().save(Rooms.getInstance());
     }
 }
