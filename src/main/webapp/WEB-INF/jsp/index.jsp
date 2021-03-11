@@ -10,8 +10,9 @@
 </head>
 <body>
 <h2>Choose a room</h2>
+<h3><c:out value="${requestScope.errorMessage}"/></h3>
 <label for="countrySelect">Countries:</label>
-<form id="country" method="GET" action="${pageContext.servletContext.contextPath}/room">
+<form id="country" method="GET" action="${pageContext.servletContext.contextPath}/rooms">
     <div>
         <select id="countrySelect" name="countryCode" form="country">
             <c:forEach var="locale" items="${applicationScope.locales}">

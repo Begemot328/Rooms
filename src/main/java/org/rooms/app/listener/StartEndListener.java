@@ -1,9 +1,12 @@
 package org.rooms.app.listener;
 
 
+import org.rooms.app.controller.Controller;
 import org.rooms.app.controller.RequestParameters;
 import org.rooms.app.service.RoomJsonConverter;
 import org.rooms.app.service.Rooms;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -13,6 +16,8 @@ import java.util.Locale;
 
 @WebListener
 public class StartEndListener implements ServletContextListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(StartEndListener.class);
 
     public void contextInitialized (ServletContextEvent ev) {
         ServletContext context = ev.getServletContext();
@@ -37,7 +42,5 @@ public class StartEndListener implements ServletContextListener {
                 null);
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 null);
-
-        new RoomJsonConverter().save(Rooms.getInstance());
     }
 }

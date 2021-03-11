@@ -1,18 +1,25 @@
 package org.rooms.app.controller;
 
 import org.rooms.app.exception.CountryException;
+import org.rooms.app.exception.JSONException;
 import org.rooms.app.service.CountryObject;
+import org.rooms.app.service.RoomJsonConverter;
 import org.rooms.app.service.Rooms;
+import org.rooms.app.util.IPcheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/room")
+@WebServlet(urlPatterns = "/rooms")
 public class Controller extends HttpServlet {
 
     private static final String WRONG_COUNTRY = "Wrong country";
@@ -23,14 +30,7 @@ public class Controller extends HttpServlet {
         String countryCode = "";
         String countryName = "";
 
-        try {
-            CountryObject country = new CountryObject(getClientIp(request));
-            countryCode = country.getCode();
-            countryName = country.getName();
-        } catch (CountryException e) {
-            request.setAttribute(RequestParameters.ERROR_MESSAGE, e.getMessage());
-            request.getRequestDispatcher(JSPPages.ERROR_PAGE.getPage()).forward(request, response);
-        }
+
 
         if (request.getParameter(RequestParameters.LOCAL) != null) {
             request.setAttribute(RequestParameters.COUNTRY_CODE, CountryObject.LOCALHOST_CODE);
@@ -38,8 +38,16 @@ public class Controller extends HttpServlet {
             request.setAttribute(RequestParameters.STATUS, Rooms.getInstance().getRoom(countryCode));
             logger.debug(Rooms.getInstance().getRoom(countryCode) + "");
             request.getRequestDispatcher(JSPPages.ROOM_PAGE.getPage()).forward(request, response);
-        } else if (countryCode.toLowerCase().equals(request.getParameter(RequestParameters.COUNTRY_CODE))
-                || request.getParameter(RequestParameters.AUTO) != null) {
+        } else if (request.getParameter(RequestParameters.AUTO) != null) {
+            try {
+                CountryObject country = new CountryObject(IPcheck.getClientIp(request));
+                countryCode = country.getCode();
+                countryName = country.getName();
+            } catch (CountryException e) {
+                request.setAttribute(RequestParameters.ERROR_MESSAGE, e.getMessage());
+                request.getRequestDispatcher(JSPPages.ERROR_PAGE.getPage()).forward(request, response);
+            }
+
             request.setAttribute(RequestParameters.COUNTRY_CODE, countryCode);
             request.setAttribute(RequestParameters.COUNTRY_NAME, countryName);
             request.setAttribute(RequestParameters.STATUS, Rooms.getInstance().getRoom(countryCode));
@@ -51,20 +59,13 @@ public class Controller extends HttpServlet {
     }
 
     @Override
-    public void init() {
+    public void destroy() {
+        new RoomJsonConverter().save(Rooms.getInstance());
+        logger.debug("destroy");
     }
 
-    private static String getClientIp(HttpServletRequest request) {
+    @Override
+    public void init() {
 
-        String remoteAddr = "";
-
-        if (request != null) {
-            remoteAddr = request.getHeader("X-FORWARDED-FOR");
-            if (remoteAddr == null || "".equals(remoteAddr)) {
-                remoteAddr = request.getRemoteAddr();
-            }
-        }
-        logger.debug(remoteAddr);
-        return remoteAddr;
     }
 }

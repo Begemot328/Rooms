@@ -1,5 +1,6 @@
 package org.rooms.app.websocket;
 
+import org.rooms.app.service.RoomJsonConverter;
 import org.rooms.app.service.Rooms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,10 @@ public class RoomWebSocket {
         logger.debug(country + " message " + isOn + " from " + session.getId());
 
         Rooms.getInstance().setRoom(country, Boolean.valueOf(isOn));
+
+        new RoomJsonConverter().save(Rooms.getInstance());
+        logger.debug("destroy");
+        System.out.println("destroy");
 
         logger.debug(country + " " + Rooms.getInstance().getRoom(country));
         sessions = sessionPool.get(country);
