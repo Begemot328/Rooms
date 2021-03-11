@@ -49,7 +49,7 @@ public class RoomWebSocket {
 
         Rooms.getInstance().setRoom(country, Boolean.valueOf(isOn));
 
-        new RoomJsonConverter().save(Rooms.getInstance());
+        RoomJsonConverter.getInstance().save(Rooms.getInstance());
         logger.debug("destroy");
         System.out.println("destroy");
 

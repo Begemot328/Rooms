@@ -18,9 +18,20 @@ import java.util.Set;
 public class RoomJsonConverter {
     private static final String FILENAME = "c:/resources/countries.json";
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static final RoomJsonConverter INSTANCE = new RoomJsonConverter();
+
+    private String filename;
+
+    public static RoomJsonConverter getInstance() {
+        return INSTANCE;
+    }
+
+    private  RoomJsonConverter() {}
 
     public Map<String, Boolean> read (String filename) {
         Map<String, Boolean> map = new HashMap<>();
+
+        this.filename = filename;
 
         JSONParser jsonParser = new JSONParser();
         logger.debug("File " + new File(filename).getAbsolutePath());
@@ -61,10 +72,6 @@ public class RoomJsonConverter {
         writeToFile(write(rooms.getRooms()));
     }
 
-    public void save(Rooms rooms, String filename) {
-        writeToFile(write(rooms.getRooms()), filename);
-    }
-
     public String write (Map<String, Boolean>  rooms) {
 
         JSONObject roomsJSON = new JSONObject();
@@ -75,11 +82,7 @@ public class RoomJsonConverter {
         return roomsJSON.toString();
     }
 
-    public void writeToFile (String rooms) {
-        writeToFile(rooms, FILENAME);
-    }
-
-    public void writeToFile (String rooms, String filename) {
+       public void writeToFile (String rooms) {
         if (!(new File(filename).exists())) {
             try {
                 new File(filename).createNewFile();

@@ -34,7 +34,7 @@ public class StartEndListener implements ServletContextListener {
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 Locale.getISOCountries());
 
-        new RoomJsonConverter().open(Rooms.getInstance(), context.getRealPath(FILENAME));
+        RoomJsonConverter.getInstance().open(Rooms.getInstance(), context.getRealPath(FILENAME));
     }
 
     public void contextDestroyed (ServletContextEvent ev) {
@@ -44,7 +44,7 @@ public class StartEndListener implements ServletContextListener {
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 null);
 
-        new RoomJsonConverter().save(Rooms.getInstance(), context.getRealPath(FILENAME));
+        RoomJsonConverter.getInstance().save(Rooms.getInstance());
         logger.debug("destroy context");
     }
 }

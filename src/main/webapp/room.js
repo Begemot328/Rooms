@@ -28,7 +28,8 @@ function onLoad() {
 
     node.innerText = selectVar(isOn, var1, var2);
     code = document.getElementById("code").innerText;
-    urlWs = "ws://" + document.location.host + document.location.pathname + '/' + code;
+    urlWs = "ws://" + document.location.host + document.location.pathname.replace('rooms', 'room') + '/' + code;
+    url = "ws://localhost:8081/Rooms_war_exploded/room/" + code;
     socket = new WebSocket(urlWs);
     socket.onmessage = onMessage;
 }

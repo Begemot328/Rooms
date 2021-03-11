@@ -31,10 +31,10 @@ public class Controller extends HttpServlet {
         String countryName = "";
 
         if (request.getParameter(RequestParameters.LOCAL) != null) {
+            countryCode = "local";
             request.setAttribute(RequestParameters.COUNTRY_CODE, CountryObject.LOCALHOST_CODE);
             request.setAttribute(RequestParameters.COUNTRY_NAME, CountryObject.LOCALHOST_NAME);
             request.setAttribute(RequestParameters.STATUS, Rooms.getInstance().getRoom(countryCode));
-            logger.debug(Rooms.getInstance().getRoom(countryCode) + "");
             request.getRequestDispatcher(JSPPages.ROOM_PAGE.getPage()).forward(request, response);
         } else if (request.getParameter(RequestParameters.AUTO) != null) {
             try {

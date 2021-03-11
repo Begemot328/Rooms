@@ -9,11 +9,10 @@ import org.rooms.app.util.IPcheck;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/room/*"})
-public class StatusFilter implements Filter {
+@WebFilter(urlPatterns = {"/rooms/*"})
+public class CountryFilter implements Filter {
 
     private static final String WRONG_COUNTRY = "Wrong country!";
 
