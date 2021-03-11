@@ -9,6 +9,7 @@ import org.rooms.app.exception.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +19,12 @@ public class RoomJsonConverter {
     private static final String FILENAME = "c:/resources/countries.json";
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    public Map<String, Boolean> read () {
+    public Map<String, Boolean> read (String filename) {
         Map<String, Boolean> map = new HashMap<>();
 
         JSONParser jsonParser = new JSONParser();
-        logger.debug("File " + new File(FILENAME).getAbsolutePath());
-        try (FileReader reader = new FileReader(FILENAME)) {
+        logger.debug("File " + new File(filename).getAbsolutePath());
+        try (FileReader reader = new FileReader(filename)) {
 
             //Read JSON file
             Object obj = jsonParser.parse(reader);
@@ -42,15 +43,26 @@ public class RoomJsonConverter {
         } catch (ParseException | IOException e) {
             throw new JSONException(e);
         }
+    }
 
+    public Map<String, Boolean> read () {
+        return read(FILENAME);
     }
 
     public void open(Rooms rooms) {
         rooms.getRooms().putAll(read());
     }
 
+    public void open(Rooms rooms, String filename) {
+        rooms.getRooms().putAll(read(filename));
+    }
+
     public void save(Rooms rooms) {
         writeToFile(write(rooms.getRooms()));
+    }
+
+    public void save(Rooms rooms, String filename) {
+        writeToFile(write(rooms.getRooms()), filename);
     }
 
     public String write (Map<String, Boolean>  rooms) {
@@ -64,20 +76,24 @@ public class RoomJsonConverter {
     }
 
     public void writeToFile (String rooms) {
-        if (!(new File(FILENAME).exists())) {
+        writeToFile(rooms, FILENAME);
+    }
+
+    public void writeToFile (String rooms, String filename) {
+        if (!(new File(filename).exists())) {
             try {
-                new File(FILENAME).createNewFile();
+                new File(filename).createNewFile();
             } catch (IOException e) {
                 throw new JSONException(e);
             }
         }
-        try (FileWriter file = new FileWriter(FILENAME)) {
+        try (FileWriter file = new FileWriter(filename)) {
 
             file.write(rooms);
             file.flush();
         } catch (IOException e) {
             throw new JSONException(e);
         }
-        logger.debug(new File(FILENAME).getAbsolutePath());
+        logger.debug(new File(filename).getAbsolutePath());
     }
 }

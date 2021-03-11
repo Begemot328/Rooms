@@ -30,8 +30,6 @@ public class Controller extends HttpServlet {
         String countryCode = "";
         String countryName = "";
 
-
-
         if (request.getParameter(RequestParameters.LOCAL) != null) {
             request.setAttribute(RequestParameters.COUNTRY_CODE, CountryObject.LOCALHOST_CODE);
             request.setAttribute(RequestParameters.COUNTRY_NAME, CountryObject.LOCALHOST_NAME);
@@ -47,9 +45,8 @@ public class Controller extends HttpServlet {
                 request.setAttribute(RequestParameters.ERROR_MESSAGE, e.getMessage());
                 request.getRequestDispatcher(JSPPages.ERROR_PAGE.getPage()).forward(request, response);
             }
-
-            request.setAttribute(RequestParameters.COUNTRY_CODE, countryCode);
             request.setAttribute(RequestParameters.COUNTRY_NAME, countryName);
+            request.setAttribute(RequestParameters.COUNTRY_CODE, countryCode);
             request.setAttribute(RequestParameters.STATUS, Rooms.getInstance().getRoom(countryCode));
             request.getRequestDispatcher(JSPPages.ROOM_PAGE.getPage()).forward(request, response);
         } else {
@@ -60,12 +57,9 @@ public class Controller extends HttpServlet {
 
     @Override
     public void destroy() {
-        new RoomJsonConverter().save(Rooms.getInstance());
-        logger.debug("destroy");
     }
 
     @Override
     public void init() {
-
     }
 }

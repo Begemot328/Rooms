@@ -18,6 +18,7 @@ import java.util.Locale;
 public class StartEndListener implements ServletContextListener {
 
     private static final Logger logger = LoggerFactory.getLogger(StartEndListener.class);
+    private static final String FILENAME = "/countries.json";
 
     public void contextInitialized (ServletContextEvent ev) {
         ServletContext context = ev.getServletContext();
@@ -33,7 +34,7 @@ public class StartEndListener implements ServletContextListener {
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 Locale.getISOCountries());
 
-        new RoomJsonConverter().open(Rooms.getInstance());
+        new RoomJsonConverter().open(Rooms.getInstance(), context.getRealPath(FILENAME));
     }
 
     public void contextDestroyed (ServletContextEvent ev) {
@@ -42,5 +43,8 @@ public class StartEndListener implements ServletContextListener {
                 null);
         context.setAttribute(RequestParameters.COUNTRY_NAMES,
                 null);
+
+        new RoomJsonConverter().save(Rooms.getInstance(), context.getRealPath(FILENAME));
+        logger.debug("destroy context");
     }
 }

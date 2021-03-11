@@ -16,14 +16,16 @@
 </div>
 <h4>Bulb status:</h4>
 <h4 id="status"></h4>
-<img id="bulb" src="${pageContext.request.contextPath}/jpg/on.jpg" alt="bulb"/>
+<img id="bulb" src="${pageContext.request.contextPath}/resources/jpg/on.jpg" alt="bulb"/>
 <var hidden id="var1">on</var>
 <var hidden id="var2">off</var>
+<var hidden id="url">${pageContext.request.requestURL}</var>
+<var hidden id="context">${pageContext.servletContext.contextPath}</var>
+<var hidden id="uri">${pageContext.request.requestURI}</var>
 <var hidden id="link1">${pageContext.request.contextPath}/resources/jpg/on.jpg</var>
 <var hidden id="link2">${pageContext.request.contextPath}/resources/jpg/off.jpg</var>
 <var hidden id="initial_status"><c:out value="${requestScope.status}"/></var>
 <var hidden id="code"><c:out value="${requestScope.countryCode}"/></var>
-
 <button onclick="turnOn()" id="on">
     TURN ON
 </button>

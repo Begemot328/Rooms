@@ -1,5 +1,5 @@
 var code;
-var url;
+var urlWs;
 var socket;
 var isOn;
 var node;
@@ -8,6 +8,9 @@ var var2;
 var bulb;
 var link1;
 var link2;
+var url;
+var context;
+var uri;
 window.onload = onLoad;
 
 function onLoad() {
@@ -18,12 +21,15 @@ function onLoad() {
     var2 = document.getElementById("var2").innerText;
     link1 = document.getElementById("link1").innerText;
     link2 = document.getElementById("link2").innerText;
+    url = document.getElementById("url").innerText;
+    uri = document.getElementById("uri").innerText;
+    context = document.getElementById("context").innerText;
     bulb.src = selectVar(isOn, link1, link2);
 
     node.innerText = selectVar(isOn, var1, var2);
     code = document.getElementById("code").innerText;
-    url = "ws://localhost:8081/Rooms_war_exploded/room/" + code;
-    socket = new WebSocket(url);
+    urlWs = "ws://" + document.location.host + document.location.pathname + '/' + code;
+    socket = new WebSocket(urlWs);
     socket.onmessage = onMessage;
 }
 
