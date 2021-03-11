@@ -50,7 +50,9 @@ public class Controller extends HttpServlet {
             request.setAttribute(RequestParameters.STATUS, Rooms.getInstance().getRoom(countryCode));
             request.getRequestDispatcher(JSPPages.ROOM_PAGE.getPage()).forward(request, response);
         } else {
-            request.setAttribute(RequestParameters.ERROR_MESSAGE, WRONG_COUNTRY);
+            if (!(request.getParameter(RequestParameters.COUNTRY_CODE) == null)) {
+                request.setAttribute(RequestParameters.ERROR_MESSAGE, WRONG_COUNTRY);
+            }
             request.getRequestDispatcher(JSPPages.START_PAGE.getPage()).forward(request, response);
         }
     }

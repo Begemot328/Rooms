@@ -27,7 +27,8 @@ public class CountryFilter implements Filter {
         String countryCode = "";
         String countryName = "";
 
-        if (request.getParameter(RequestParameters.LOCAL) != null) {
+        if (request.getParameter(RequestParameters.LOCAL) != null
+                || request.getParameter(RequestParameters.COUNTRY_CODE) == null) {
             filterChain.doFilter(request, response);
         } else {
             CountryObject country = null;
@@ -40,7 +41,7 @@ public class CountryFilter implements Filter {
             }
             countryCode = country.getCode();
 
-            if(!request.getParameter(RequestParameters.COUNTRY_CODE).equalsIgnoreCase(countryCode)) {
+            if (!countryCode.equalsIgnoreCase(request.getParameter(RequestParameters.COUNTRY_CODE))) {
                 request.setAttribute(RequestParameters.ERROR_MESSAGE, WRONG_COUNTRY);
                 request.getRequestDispatcher(JSPPages.ERROR_PAGE.getPage()).forward(request, response);
             } else {
